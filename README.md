@@ -1,3 +1,1 @@
-Noteful Client
-
-Chris Bogan
+#Noteful organizing React code
