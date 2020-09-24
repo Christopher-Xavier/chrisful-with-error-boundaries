@@ -17,7 +17,10 @@ class App extends Component {
     this.state = {
     notes: [],
     folders: [],
+    addFolder:[],
+  
   }
+
 }
 
   componentDidMount() {

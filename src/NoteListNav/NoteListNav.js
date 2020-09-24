@@ -15,7 +15,7 @@ export default class NoteListNav extends React.Component {
    
   }
 
-  static contextType = ApiContext;
+  static contextType =ApiContext;
 
   handleClickDelete = e => {
     // e.preventDefault()
@@ -78,4 +78,3 @@ export default class NoteListNav extends React.Component {
     )
   }
 }
-

@@ -1,65 +1,45 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import ApiContext from '../ApiContext'
-import config from '../config'
-import './Note.css'
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { format } from 'date-fns';
+import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './Note.css';
 
-export default class Note extends React.Component {
-  static defaultProps ={
-    onDeleteNote: () => {},
-  }
-  static contextType = ApiContext;
-
-  handleClickDelete = e => {
-    e.preventDefault()
-    const noteId = this.props.id
-
-    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json'
-      }
-    })
-      .then(() => {
-        this.context.deleteNote(noteId)
-        // allow parent to perform extra behaviour
-        this.props.onDeleteNote(noteId)
-      })
-      .catch(error => {
-        console.error({ error })
-      })
-  }
-
+class Note extends Component {
   render() {
-    const { name, id, modified } = this.props
     return (
-      <div className='Note'>
+      <div className='Note_id'>
         <h2 className='Note__title'>
-          <Link to={`/note/${id}`}>
-            {name}
-          </Link>
+          <Link to={`/note/${this.props.id}`}>{this.props.name}</Link>
         </h2>
         <button
           className='Note__delete'
           type='button'
-          onClick={this.handleClickDelete}
+          onClick={() => {
+            this.props.handleDelete(this.props.id);
+            this.props.history.push('/');
+          }}
         >
-          <FontAwesomeIcon icon='trash-alt' />
-          {' '}
-          remove
+          <FontAwesomeIcon icon='trash-alt' /> remove
         </button>
         <div className='Note__dates'>
           <div className='Note__dates-modified'>
-            Modified
-            {' '}
+            Modified{' '}
             <span className='Date'>
-              {format(new Date(modified), "MM/yyyy")}
+              {format(this.props.modified, 'Do MMM YYYY')}
             </span>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+export default withRouter(Note);
+
+Note.propTypes = {
+  modified: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  handleDelete: PropTypes.func
+};
